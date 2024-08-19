@@ -9,9 +9,10 @@ def encode16byte(val: int):
     padding = 32 - len(val_hex)
     return "0" * padding + val_hex 
 
-precompile_address = '00'*19 + '0c'
-input_size = encode16byte(64)
-output_size = encode16byte(64)
+# g1 add precompile
+precompile_address = '00'*19 + '0b'
+input_size = encode16byte(256)
+output_size = encode16byte(128)
 g2_add_x = g1_gen_affine().encode_eip2537()
 g2_add_y = g1_gen_affine().encode_eip2537()
 
