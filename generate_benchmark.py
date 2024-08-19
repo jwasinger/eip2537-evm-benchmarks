@@ -35,15 +35,6 @@ def reverse_endianess(word: str):
         result += word[i:i+2]
     return result
 
-def calc_limb_count(val: int) -> int:
-    assert val > 0, "val must be greater than 0"
-
-    count = 0
-    while val != 0:
-        val >>= 64
-        count += 1
-    return count
-
 def encode_val_for_mstore(val: int, res_size: int) -> [str]:
     # modulus:
     #   * assert that it fills most significant limb
@@ -55,22 +46,6 @@ def encode_val_for_mstore(val: int, res_size: int) -> [str]:
     #   * left-pad until it is res_size
     #   * right pad until it is a multiple of evm word size
     pass
-
-def encode_modulus_for_mstore(mod: int) -> [str]:
-    # TODO: assert that it would fill most significant u64 limb
-    mod_hex = hex(mod)[2:]
-    if len(mod_hex) % 2 != 0:
-        mod_hex = "0"+mod_hex
-
-    if len(mod_hex) % 64 != 0:
-        padded_size = ((len(mod_hex) + 63) // 64) * 64
-        mod_hex = mod_hex + "0"*(padded_size  - len(mod_hex))
-
-    res = []
-    for i in range(0, len(mod_hex), 64):
-        res.append(mod_hex[i:i+64])
-
-    return res
 
 def encode_field_element_for_mstore(val: int, res_size: int) -> [str]:
     if val == 0:
@@ -210,40 +185,46 @@ def gen_setmod(mod: int) -> str:
     result += OP_SETMOD 
     return result
 
-def gen_arith_op(op: str, out_slot: int, x_slot: int, y_slot: int) -> str:
-    return EVMMAX_ARITH_OPS[op] + gen_encode_arith_immediate(out_slot, x_slot, y_slot)
+def gen_store_input(input, input_offset):
+    pass
+
+def get_idx_after_output(output_offset, output_size):
+    pass
+
+def gen_call_precompile(target: int, inp_offset: int, inp_size: int, ret_offset: int, ret_size: int):
+    return EVM_OPS["GASLIMIT"] + gen_push(target) + gen_push(input_offset) + gen_push(inp_size) + gen_push(ret_offset) + gen_push(ret_size) + EVM_OPS["CALL"]
 
 MAX_CONTRACT_SIZE = 24576
 
+def gen_g1_add_input(point: G1Affine):
+    encoded_point = point.encode()
+    result = gen_mstore_literal(encoded_point[0:128], 0)
+    result += gen_mstore_literal(encoded_point[128:], 32)
+    return result
 
-def gen_benchmark(op: str, mod: int):
+def gen_g1_add_test_case_input():
+    p1 = g1_gen()
+    p2 = g1_gen()
+
+    return gen_g1_add_input(p1) + gen_g1_add_input(p2)
+
+def gen_benchmark():
     bench_code = ""
 
-    # setmod
-    bench_code += gen_setmod(mod)
+    bench_code = gen_g1_add_test_case_input()
 
-    # store inputs
-    bench_code += gen_random_scratch_space(0, mod, SCRATCH_SPACE_SIZE)
-
-    # storex
-    bench_code += gen_storex(0, 0, SCRATCH_SPACE_SIZE)
-
-    # loop
-
-    arr = np.array([i for i in range(SCRATCH_SPACE_SIZE)])
-    p1 = np.random.permutation(arr)
-    p2 = np.random.permutation(arr)
-    p3 = np.random.permutation(arr)
-
-    scratch_space_vals = [(p1[i], p2[i], p3[i]) for i in range(len(arr))]
+    loop_body_size = 12
+    loop_code_size = 43
+    setup_size = 100 # TODO: actually calc this
     # TODO: generate the calls
-    iter_count = 5000
+    iter_count = math.floor((MAX_CONTRACT_SIZE - (loop_code_size + setup_code_size)) / loop_body_size)  
 
     inner_loop_arith_op_count = 0
     loop_body = ""
 
     for i in range(iter_count):
-        loop_body += gen_arith_op(op, p1[i % len(arr)], p2[i % len(arr)], p3[i % len(arr)])
+        loop_body += gen_call_precompile(precompile_addr, inp_offset, inp_size, ret_offset, ret_size)
+        loop_body += EVM_OPS["POP"] # pop the return status code
         inner_loop_arith_op_count += 1
 
     bench_code = gen_loop().format(bench_code, loop_body, gen_push_int(int(len(bench_code) / 2) + 33))

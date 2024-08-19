@@ -20,7 +20,7 @@
 	dup1
 	dup3
 	add
-        0xc0
+        0x34
 	0x00
 	calldatacopy
 	//stack: output_size, input_size
@@ -58,6 +58,7 @@
 		add
 		dup1
 		0x00
+		swap1
 		gt
 		loop jumpi
 }
