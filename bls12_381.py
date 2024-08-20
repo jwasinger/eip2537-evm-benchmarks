@@ -65,15 +65,17 @@ class G1ProjPoint:
         z_inv = fq_inv(self.z)
         return G1AffinePoint(fq_mul(self.x, z_inv), fq_mul(self.y, z_inv))
 
-    def add(p1, p2):
-        pass
-
-    def double(p1, p2):
-        pass
-
     def is_on_curve(self):
         # TODO: return Y^2 Z = X^3 + b Z^3
         pass
+
+    def add(self, rhs):
+        res = point_add(self, rhs, fq_mul, fq_add, fq_sub, fq_mul_by_3b)
+        return G1ProjPoint(res[0], res[1], res[2])
+
+    def double(self):
+        res = point_double(self, fq_mul, fq_add, fq_sub, fq_mul_by_3b)
+        return G1ProjPoint(res[0], res[1], res[2])
 
     def is_inf(self):
         pass
@@ -121,6 +123,9 @@ def fq2_sub(x, y) -> (int, int):
 def fq2_mul_by_3b(x):
     # TODO: double-check
     return fq2_mul(x, (to_mont(12), to_mont(12)))
+
+def fq_mul_by_3b(x):
+    return fq_mul(x, to_mont(12))
 
 class G2AffinePoint:
     def __init__(self, x0, x1, y0, y1):
@@ -269,6 +274,13 @@ g2_gen_point_affine = G2AffinePoint(g2_gen_x_0, g2_gen_x_1, g2_gen_y_0, g2_gen_y
 def g1_gen():
     return g1_gen_point
 
+def g1_gen_mont():
+    res = g1_gen()
+    res.x = to_mont(res.x)
+    res.y = to_mont(res.y)
+    res.z = to_mont(res.z)
+    return res
+
 def g2_gen():
     return g2_gen_point.clone()
 
@@ -297,15 +309,14 @@ def test_g2_mul():
     assert res.is_inf()
 
 def test_g2_add():
-    gen = g2_gen_mont()
-    inf = g2_inf()
-    res = gen.add(inf)
+    gen = g1_gen_mont()
+    res = gen.add(gen)
+    #res = gen.double()
     import pdb; pdb.set_trace()
-    assert res.is_inf()
 
 def run_tests():
-    #test_g2_mul()
-    test_g2_add()
+    test_g2_mul()
+    #test_g2_add()
 
 if __name__ == "__main__":
     run_tests()

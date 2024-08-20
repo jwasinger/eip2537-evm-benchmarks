@@ -68,6 +68,22 @@ elif precompile == "mapfp2":
 	fp_1 = encode_fp_eip2537(SUBGROUP_ORDER)
 
 	precompile_input = input_size + output_size + precompile_address + fp_0 + fp_1
+elif precompile == "pairing":
+	if len(sys.argv) < 3:
+		raise Exception("need to specify number of pairs as 2nd parameter")
+
+	num_pairs = int(sys.argv[2])
+
+	precompile_address = '00'*19 + '11'
+	input_size = encode16byte(num_pairs * (128 + 256))
+	output_size = encode16byte(32)
+	input = ""
+	for i in range(num_pairs):
+		pt_g1 = g1_gen_affine().encode_eip2537()
+		pt_g2 = g2_gen_affine().encode_eip2537()
+		input += pt_g1 + pt_g2
+
+	precompile_input = input_size + output_size + precompile_address + input
 else:
 	raise Exception("invalid precompile selection")
 
