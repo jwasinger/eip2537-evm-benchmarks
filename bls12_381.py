@@ -37,6 +37,10 @@ def encode_fp_eip2537(x) -> str:
     x_hex = hex(x)[2:]
     return "0" * (128 - len(x_hex)) + x_hex
 
+def encode_fr_eip2537(x) -> str:
+    x_hex = hex(x)[2:]
+    return "0" * (64 - len(x_hex)) + x_hex
+
 class G1AffinePoint:
     def __init__(self, x, y):
         self.x = x

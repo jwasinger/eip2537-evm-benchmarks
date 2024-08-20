@@ -1,6 +1,6 @@
 import sys
 
-from bls12_381 import g1_gen_affine, g2_gen_affine
+from bls12_381 import g1_gen_affine, g2_gen_affine, encode_fp_eip2537, encode_fr_eip2537, SUBGROUP_ORDER
 
 # encode-val to 16byte padded big-endian hex string
 def encode16byte(val: int):
@@ -24,6 +24,15 @@ if precompile == 'g1add':
 	g2_add_y = g1_gen_affine().encode_eip2537()
 
 	precompile_input = input_size + output_size + precompile_address + g2_add_x + g2_add_y
+elif precompile == 'g1mul':
+	precompile_address = '00'*19 + '0c'
+	input_size = encode16byte(128 + 32)
+	output_size = encode16byte(128)
+
+	point = g1_gen_affine().encode_eip2537()
+	scalar = encode_fr_eip2537(SUBGROUP_ORDER)
+
+	precompile_input = input_size + output_size + precompile_address + point + scalar
 elif precompile == 'g2add':
 	precompile_address = '00'*19 + '0e'
 	input_size = encode16byte(512)
@@ -33,6 +42,15 @@ elif precompile == 'g2add':
 	g2_add_y = g2_gen_affine().encode_eip2537()
 
 	precompile_input = input_size + output_size + precompile_address + g2_add_x + g2_add_y
+elif precompile == 'g2mul':
+	precompile_address = '00'*19 + '0f'
+	input_size = encode16byte(256 + 32)
+	output_size = encode16byte(256)
+
+	point = g2_gen_affine().encode_eip2537()
+	scalar = encode_fr_eip2537(SUBGROUP_ORDER)
+
+	precompile_input = input_size + output_size + precompile_address + point + scalar
 else:
 	raise Exception("invalid precompile selection")
 
