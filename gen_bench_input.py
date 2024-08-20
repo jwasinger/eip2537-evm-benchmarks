@@ -51,6 +51,23 @@ elif precompile == 'g2mul':
 	scalar = encode_fr_eip2537(SUBGROUP_ORDER)
 
 	precompile_input = input_size + output_size + precompile_address + point + scalar
+elif precompile == "mapfp":
+	precompile_address = '00'*19 + '12'
+	input_size = encode16byte(64)
+	output_size = encode16byte(128)
+
+	fp = encode_fp_eip2537(SUBGROUP_ORDER)
+
+	precompile_input = input_size + output_size + precompile_address + fp
+elif precompile == "mapfp2":
+	precompile_address = '00'*19 + '13'
+	input_size = encode16byte(128)
+	output_size = encode16byte(256)
+
+	fp_0 = encode_fp_eip2537(SUBGROUP_ORDER)
+	fp_1 = encode_fp_eip2537(SUBGROUP_ORDER)
+
+	precompile_input = input_size + output_size + precompile_address + fp_0 + fp_1
 else:
 	raise Exception("invalid precompile selection")
 
