@@ -14,3 +14,7 @@ Pairing: constant-time operation.  any valid input is a worst-case input.
 Fp/Fp2 Mapping: most inputs should be worst-case (but need to verify this)
 
 MSM: ?
+
+## Usage
+`PRECOMPILE=precompileName ./make_and_bench.sh`
+currently supports "g1add", "g2add" for `PRECOMPILE` values.

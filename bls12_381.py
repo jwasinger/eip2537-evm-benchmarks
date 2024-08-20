@@ -123,6 +123,9 @@ class G2AffinePoint:
         self.x = (x0, x1)
         self.y = (y0, y1)
 
+    def encode_eip2537(self):
+        return encode_fp_eip2537(self.x[0]) + encode_fp_eip2537(self.x[1]) + encode_fp_eip2537(self.y[0]) + encode_fp_eip2537(self.y[1])
+
     def eq(self, other) -> bool:
         return self.x[0] == other.x[0] and self.x[1] == other.x[1] and self.y[0] == other.y[0] and self.y[1] == other.y[1]
 
