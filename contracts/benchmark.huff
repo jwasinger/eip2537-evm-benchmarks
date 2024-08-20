@@ -42,6 +42,7 @@
 		add
 		// stack: return offset, loop counter, precompile_address, output_size, input_size
 
+
 		dup4
 		swap1
 		dup6
@@ -50,6 +51,7 @@
 		gaslimit
 		staticcall
 		pop
+
 
 		// stack: loop counter, precompile address, output size, input size
 

@@ -33,10 +33,17 @@ def fq_inv(x) -> int:
     res = pow(x, -1, fq_mod)
     return to_mont(res)
 
+def encode_fp_eip2537(x) -> str:
+    x_hex = hex(x)[2:]
+    return "0" * (128 - len(x_hex)) + x_hex
+
 class G1AffinePoint:
     def __init__(self, x, y):
         self.x = x
         self.y = y
+
+    def encode_eip2537(self):
+        return encode_fp_eip2537(self.x) + encode_fp_eip2537(self.y)
 
 class G1ProjPoint:
     def __init__(self, x, y, z):
@@ -239,6 +246,7 @@ def g2_point_from_raw(raw):
 g1_gen_x = 3685416753713387016781088315183077757961620795782546409894578378688607592378376318836054947676345821548104185464507
 g1_gen_y = 1339506544944476473020471379941921221584933875938349620426543736416511423956333506472724655353366534992391756441569
 g1_gen_point = G1ProjPoint(g1_gen_x, g1_gen_y, 1)
+g1_gen_point_affine = G1AffinePoint(g1_gen_x, g1_gen_y)
 
 g2_gen_x_0 = 352701069587466618187139116011060144890029952792775240219908644239793785735715026873347600343865175952761926303160
 g2_gen_x_1 = 3059144344244213709971259814753781636986470325476647558659373206291635324768958432433509563104347017837885763365758
@@ -249,6 +257,7 @@ g2_gen_z_1 = 0
 
 g2_gen_point = G2ProjPoint(g2_gen_x_0, g2_gen_x_1, g2_gen_y_0, g2_gen_y_1, g2_gen_z_0, g2_gen_z_1)
 g2_gen_point_affine = G2AffinePoint(g2_gen_x_0, g2_gen_x_1, g2_gen_y_0, g2_gen_y_1)
+
 
 def g1_gen():
     return g1_gen_point
@@ -269,6 +278,9 @@ def g2_gen_mont():
 
 def g2_gen_affine():
     return g2_gen_point_affine
+
+def g1_gen_affine():
+    return g1_gen_point_affine
 
 def test_g2_mul():
     gen = g2_gen_mont()

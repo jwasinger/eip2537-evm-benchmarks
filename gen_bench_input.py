@@ -17,6 +17,5 @@ g2_add_x = g1_gen_affine().encode_eip2537()
 g2_add_y = g1_gen_affine().encode_eip2537()
 
 g1_add_input = input_size + output_size + precompile_address + g2_add_x + g2_add_y
-import pdb; pdb.set_trace()
 
-print("g1 add input (partial) is: {}".format(g1_add_input))
+print(g1_add_input)
