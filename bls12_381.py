@@ -49,6 +49,9 @@ class G1AffinePoint:
     def encode_eip2537(self):
         return encode_fp_eip2537(self.x) + encode_fp_eip2537(self.y)
 
+    def eq(self, other):
+        return self.x == other.x and self.y == other.y
+
 class G1ProjPoint:
     def __init__(self, x, y, z):
         self.x = x
@@ -148,9 +151,8 @@ class G2ProjPoint:
         return copy.deepcopy(self)
 
     def to_affine(self):
-        # TODO: add back in
-        #if self.is_inf():
-        #    return AffinePoint(0, 0)
+        if self.is_inf():
+            return G2AffinePoint(0, 0, 0, 0)
         z_inv = fq2_inv((self.z[0], self.z[1]))
         x = fq2_mul((self.x[0], self.x[1]), z_inv)
         y = fq2_mul((self.y[0], self.y[1]), z_inv)
@@ -166,8 +168,8 @@ class G2ProjPoint:
         return G2ProjPoint(res[0][0], res[0][1], res[1][0], res[1][1], res[2][0], res[2][1])
 
     def mul(self, scalar):
-        gen = g2_gen()
-        return point_mul(self, scalar, gen, fq2_mul, fq2_add, fq2_sub, fq2_mul_by_3b)
+        identity = g2_inf()
+        return point_mul(self, scalar, identity, fq2_mul, fq2_add, fq2_sub, fq2_mul_by_3b)
 
     def is_inf(self):
         return self.x == (0, 0) and self.z == (0, 0) and self.y != (0, 0)
@@ -236,7 +238,7 @@ def point_double(self, f_mul, f_add, f_sub, mul_by_3b):
 
 def point_mul(point, scalar, identity, f_mul, f_add, f_sub, mul_by_3b):
         # scalar bits from most to least significant
-        scalar_bits = reversed([scalar >> i & 1 for i in range(scalar.bit_length() - 1,-1,-1)])
+        scalar_bits = [scalar >> i & 1 for i in range(scalar.bit_length() - 1,-1,-1)]
 
         res = identity.clone()
 
@@ -303,16 +305,25 @@ def g1_gen_affine():
 
 def test_g2_mul():
     gen = g2_gen_mont()
+
+    scalar = 2
+    res = gen.mul(scalar)
+    expected = gen.add(gen)
+    assert res.to_affine().eq(expected.to_affine())
+
+    scalar = 3
+    res = gen.mul(scalar)
+    expected = gen.add(gen).add(gen)
+    assert res.to_affine().eq(expected.to_affine())
+
     scalar = SUBGROUP_ORDER
     res = gen.mul(scalar)
-    import pdb; pdb.set_trace()
     assert res.is_inf()
 
 def test_g2_add():
     gen = g1_gen_mont()
     res = gen.add(gen)
     #res = gen.double()
-    import pdb; pdb.set_trace()
 
 def run_tests():
     test_g2_mul()
