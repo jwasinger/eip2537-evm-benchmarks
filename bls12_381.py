@@ -52,6 +52,9 @@ class G1AffinePoint:
     def eq(self, other):
         return self.x == other.x and self.y == other.y
 
+    def to_proj(self):
+        return G1ProjPoint(self.x, self.y, 1)
+
 class G1ProjPoint:
     def __init__(self, x, y, z):
         self.x = x
@@ -140,6 +143,9 @@ class G2AffinePoint:
 
     def eq(self, other) -> bool:
         return self.x[0] == other.x[0] and self.x[1] == other.x[1] and self.y[0] == other.y[0] and self.y[1] == other.y[1]
+
+    def to_proj(self):
+        return G2ProjPoint(self.x[0], self.x[1], self.y[0], self.y[1], 1, 0)
 
 class G2ProjPoint:
     def __init__(self, x0, x1, y0, y1, z0, z1):

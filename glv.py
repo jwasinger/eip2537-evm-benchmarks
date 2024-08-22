@@ -1,3 +1,5 @@
+import random
+
 from bls12_381 import G2ProjPoint, fq2_mul_by_fq, g2_gen_mont, SUBGROUP_ORDER, to_mont, to_norm
 
 class Lattice():
@@ -80,7 +82,6 @@ def mul_glv(p: G2ProjPoint, s: int) -> G2ProjPoint:
 	table[14] = table[11].add(table[2])
 
 	# TODO: set k0_bytes, k1_bytes
-	import pdb; pdb.set_trace()
 
 	max_bit_len = max(len(k0_bytes), len(k1_bytes))
 	hi_word_idx = (max_bit_len - 1) // 64
@@ -100,11 +101,54 @@ def mul_glv(p: G2ProjPoint, s: int) -> G2ProjPoint:
 
 	return res
 
-def main():
-	point = g2_gen_mont()
-	s = SUBGROUP_ORDER
+def check_arity(x, y):
+	max_val = max(x,y)
+	arity = 0
+	for i in range(0, len(bin(max_val)) - 2, 2):
+		bits_x = x & 0b11
+		bits_y = y & 0b11
+		if bits_x | bits_y:
+			arity += 1
 
-	res = mul_glv(point, s)
+		x >>= 2
+		y >>= 2
+	return arity
+
+def find_scalars_with_high_arity():
+	lattice = bls12381_lattice()
+
+	best_scalar = 0
+	best_arity = 0
+	best_total_length = 0
+
+	while True:
+		scalar = random.randint(0, SUBGROUP_ORDER)
+		k = split_scalar(scalar, lattice)
+		arity = check_arity(k[0], k[1])
+		total_length = len(bin(max(k[0], k[1]))) - 2
+		if arity > best_arity and total_length > best_total_length:
+			best_scalar = scalar
+			best_total_length = total_length
+			best_arity = arity
+
+			print(best_scalar)
+			print(best_arity)
+			print(best_total_length)
+			print()
+
+# scalar where the decomposition has 62 "double-bits" (sliding window of size 2) of arity (s1|s2 not equal to zero for any bit-pairs at bits [0,2], [2,4], etc.)
+high_arity_scalar = 50597600879605352240557443896859274688352069811191692694697732254669473040618
+
+def main():
+	lattice = bls12381_lattice()
+	#point = g2_gen_mont()
+	#s = SUBGROUP_ORDER
+
+	#res = mul_glv(point, s)
+
+
+	k = split_scalar(high_arity_scalar, lattice)
+	import pdb; pdb.set_trace()
 
 if __name__ == "__main__":
 	main()

@@ -1,6 +1,8 @@
 import sys
 
-from bls12_381 import g1_gen_affine, g2_gen_affine, encode_fp_eip2537, encode_fr_eip2537, SUBGROUP_ORDER
+from bls12_381 import g1_gen_affine, g2_gen_affine, encode_fp_eip2537, encode_fr_eip2537, SUBGROUP_ORDER, g2_gen, g1_gen
+
+from glv import high_arity_scalar
 
 # encode-val to 16byte padded big-endian hex string
 def encode16byte(val: int):
@@ -20,8 +22,8 @@ if precompile == 'g1add':
 	input_size = encode16byte(256)
 	output_size = encode16byte(128)
 
-	g2_add_x = g1_gen_affine().encode_eip2537()
-	g2_add_y = g1_gen_affine().encode_eip2537()
+	g2_add_x = g1_gen().double().to_affine().encode_eip2537()
+	g2_add_y = g1_gen().double().double().to_affine().encode_eip2537()
 
 	precompile_input = input_size + output_size + precompile_address + g2_add_x + g2_add_y
 elif precompile == 'g1mul':
@@ -30,7 +32,7 @@ elif precompile == 'g1mul':
 	output_size = encode16byte(128)
 
 	point = g1_gen_affine().encode_eip2537()
-	scalar = encode_fr_eip2537(SUBGROUP_ORDER)
+	scalar = encode_fr_eip2537(high_arity_scalar)
 
 	precompile_input = input_size + output_size + precompile_address + point + scalar
 elif precompile == 'g2add':
@@ -38,8 +40,8 @@ elif precompile == 'g2add':
 	input_size = encode16byte(512)
 	output_size = encode16byte(256)
 
-	g2_add_x = g2_gen_affine().encode_eip2537()
-	g2_add_y = g2_gen_affine().encode_eip2537()
+	g2_add_x = g2_gen().double().to_affine().encode_eip2537()
+	g2_add_y = g2_gen().double().double().to_affine().encode_eip2537()
 
 	precompile_input = input_size + output_size + precompile_address + g2_add_x + g2_add_y
 elif precompile == 'g2mul':
@@ -48,7 +50,7 @@ elif precompile == 'g2mul':
 	output_size = encode16byte(256)
 
 	point = g2_gen_affine().encode_eip2537()
-	scalar = encode_fr_eip2537(SUBGROUP_ORDER)
+	scalar = encode_fr_eip2537(high_arity_scalar)
 
 	precompile_input = input_size + output_size + precompile_address + point + scalar
 elif precompile == "mapfp":
