@@ -31,7 +31,7 @@ elif precompile == 'g1mul':
 	input_size = encode16byte(128 + 32)
 	output_size = encode16byte(128)
 
-	point = g1_gen_affine().encode_eip2537()
+	point = g1_gen().double().to_affine().encode_eip2537()
 	scalar = encode_fr_eip2537(high_arity_scalar)
 
 	precompile_input = input_size + output_size + precompile_address + point + scalar
@@ -49,7 +49,7 @@ elif precompile == 'g2mul':
 	input_size = encode16byte(256 + 32)
 	output_size = encode16byte(256)
 
-	point = g2_gen_affine().encode_eip2537()
+	point = g2_gen().double().to_affine().encode_eip2537()
 	scalar = encode_fr_eip2537(high_arity_scalar)
 
 	precompile_input = input_size + output_size + precompile_address + point + scalar
