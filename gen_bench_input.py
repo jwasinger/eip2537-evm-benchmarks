@@ -1,6 +1,6 @@
 import sys
 
-from bls12_381 import g1_gen_affine, g2_gen_affine, encode_fp_eip2537, encode_fr_eip2537, SUBGROUP_ORDER, g2_gen, g1_gen, g2_gen_mont, g1_gen_mont, to_mont, to_norm
+from bls12_381 import g1_gen_affine, g2_gen_affine, encode_fp_eip2537, encode_fr_eip2537, SUBGROUP_ORDER, g2_gen, g1_gen, g2_gen_mont, g1_gen_mont, to_mont, to_norm, g1_inf
 
 from glv import high_arity_scalar
 
@@ -16,12 +16,36 @@ def encode16byte(val: int):
 precompile_input = ""
 precompile = sys.argv[1]
 
+# return non-trivial pairs which pass pairing check
 def gen_pairing_input(num_pairs: int):
+	input = ""
 	if num_pairs % 2 == 0:
 		for i in range(num_pairs):
 			if i % 2 == 0:
+				pt_g1 = g1_gen().double().neg().to_affine().encode_eip2537()
+				pt_g2 = g2_gen().to_affine().encode_eip2537()
+				input += pt_g1 + pt_g2
+			else:
 				pt_g1 = g1_gen().double().to_affine().encode_eip2537()
-				pt_g2 = g2_gen().double().neg().to_affine().encode_eip2537()
+				pt_g2 = g2_gen().to_affine().encode_eip2537()
+				input += pt_g1 + pt_g2
+	else:
+		for i in range(num_pairs):
+			if i == 0:
+				pt_g1 = g1_inf().to_affine().encode_eip2537()
+				pt_g2 = g2_gen().double().to_affine().encode_eip2537()
+
+				input += pt_g1 + pt_g2
+			elif i % 2 == 0:
+				pt_g1 = g1_gen().double().neg().to_affine().encode_eip2537()
+				pt_g2 = g2_gen().to_affine().encode_eip2537()
+				input += pt_g1 + pt_g2
+			else:
+				pt_g1 = g1_gen().double().to_affine().encode_eip2537()
+				pt_g2 = g2_gen().to_affine().encode_eip2537()
+				input += pt_g1 + pt_g2
+
+	return input
 
 # g1 add precompile
 if precompile == 'g1add':
@@ -29,10 +53,10 @@ if precompile == 'g1add':
 	input_size = encode16byte(256)
 	output_size = encode16byte(128)
 
-	g2_add_x = g1_gen_mont().double().to_affine().encode_eip2537()
-	g2_add_y = g1_gen_mont().to_affine().encode_eip2537()
+	g1_add_x = g1_gen().double().to_affine().encode_eip2537()
+	g1_add_y = g1_gen().to_affine().encode_eip2537()
 
-	precompile_input = input_size + output_size + precompile_address + g2_add_x + g2_add_y
+	precompile_input = input_size + output_size + precompile_address + g1_add_x + g1_add_y
 elif precompile == 'g1mul':
 	precompile_address = '00'*19 + '0c'
 	input_size = encode16byte(128 + 32)
@@ -47,8 +71,8 @@ elif precompile == 'g2add':
 	input_size = encode16byte(512)
 	output_size = encode16byte(256)
 
-	g2_add_x = g2_gen_mont().to_affine().encode_eip2537()
-	g2_add_y = g2_gen_mont().to_affine().encode_eip2537()
+	g2_add_x = g2_gen().double().to_affine().encode_eip2537()
+	g2_add_y = g2_gen().to_affine().encode_eip2537()
 
 	precompile_input = input_size + output_size + precompile_address + g2_add_x + g2_add_y
 elif precompile == 'g2mul':
@@ -86,19 +110,7 @@ elif precompile == "pairing":
 	precompile_address = '00'*19 + '11'
 	input_size = encode16byte(num_pairs * (128 + 256))
 	output_size = encode16byte(32)
-	input = ""
-
-	# if num_pairs % 2 == 0: (-2g1, 2G2), (2g1, -2G2) * (-2g1, 2G2), (2g1, -2G2) * ...
-	# if num_pairs %2 != 0: (-4
-	for i in range(num_pairs):
-		if i % 2 == 0:
-			pt_g1 = g1_gen().double().neg().to_affine().encode_eip2537()
-			pt_g2 = g2_gen().to_affine().encode_eip2537()
-			input += pt_g1 + pt_g2
-		else:
-			pt_g1 = g1_gen().double().to_affine().encode_eip2537()
-			pt_g2 = g2_gen().to_affine().encode_eip2537()
-			input += pt_g1 + pt_g2
+	input = gen_pairing_input(num_pairs)
 
 	precompile_input = input_size + output_size + precompile_address + input
 else:

@@ -95,7 +95,11 @@ class G1ProjPoint:
         return G1ProjPoint(self.x, self.y, self.z)
 
     def is_inf(self):
-        pass
+        return self.x == 0 and self.y != 0 and self.z == 0
+
+    def mul(self, scalar):
+        identity = g1_inf()
+        return point_mul(self, scalar, identity, fq_mul, fq_add, fq_sub, fq_mul_by_3b)
 
 def fq2_mul(x, y) -> (int, int):
     t0 = fq_mul(x[0], y[0])
@@ -302,6 +306,9 @@ g2_gen_point_affine = G2AffinePoint(g2_gen_x_0, g2_gen_x_1, g2_gen_y_0, g2_gen_y
 
 def g1_gen():
     return g1_gen_point.clone()
+
+def g1_inf():
+    return G1ProjPoint(0, to_mont(1), 0)
 
 def g1_gen_mont():
     res = g1_gen()
