@@ -16,6 +16,13 @@ def encode16byte(val: int):
 precompile_input = ""
 precompile = sys.argv[1]
 
+def gen_pairing_input(num_pairs: int):
+	if num_pairs % 2 == 0:
+		for i in range(num_pairs):
+			if i % 2 == 0:
+				pt_g1 = g1_gen().double().to_affine().encode_eip2537()
+				pt_g2 = g2_gen().double().neg().to_affine().encode_eip2537()
+
 # g1 add precompile
 if precompile == 'g1add':
 	precompile_address = '00'*19 + '0b'
@@ -80,10 +87,18 @@ elif precompile == "pairing":
 	input_size = encode16byte(num_pairs * (128 + 256))
 	output_size = encode16byte(32)
 	input = ""
+
+	# if num_pairs % 2 == 0: (-2g1, 2G2), (2g1, -2G2) * (-2g1, 2G2), (2g1, -2G2) * ...
+	# if num_pairs %2 != 0: (-4
 	for i in range(num_pairs):
-		pt_g1 = g1_gen_affine().encode_eip2537()
-		pt_g2 = g2_gen_affine().encode_eip2537()
-		input += pt_g1 + pt_g2
+		if i % 2 == 0:
+			pt_g1 = g1_gen().double().neg().to_affine().encode_eip2537()
+			pt_g2 = g2_gen().to_affine().encode_eip2537()
+			input += pt_g1 + pt_g2
+		else:
+			pt_g1 = g1_gen().double().to_affine().encode_eip2537()
+			pt_g2 = g2_gen().to_affine().encode_eip2537()
+			input += pt_g1 + pt_g2
 
 	precompile_input = input_size + output_size + precompile_address + input
 else:

@@ -38,8 +38,6 @@
 	loop:
 		// TODO: loop body inserted via templating
 		dup4
-		dup4
-		add
 		// stack: return offset, loop counter, precompile_address, output_size, input_size
 
 
@@ -28545,4 +28543,8 @@
 
 		pop // pop return offset (TODO: don't recompute this every iteration of the loop)
 		// stack: loop counter, precompile address, output size, input size
+		dup4
+		dup4
+		swap1
+		return
 }
