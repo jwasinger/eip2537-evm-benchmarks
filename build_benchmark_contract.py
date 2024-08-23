@@ -16,7 +16,7 @@ loop_body = """
 """
 
 # TODO: will want to parameterize this based on expected runtime
-loop_size = 1
+loop_size = 2850
 
 with open(source_file) as f:
 	lines = f.readlines()
