@@ -44,15 +44,16 @@
 
 
 		dup4
-		swap1
-		dup6
+		dup2
+		dup7
 		0x00
-		dup6
+		dup7
 		gaslimit
 		staticcall
 		pop
 
 
+		pop // pop return offset (TODO: don't recompute this every iteration of the loop)
 		// stack: loop counter, precompile address, output size, input size
 
 		// loop conditional jump evaluation
@@ -60,7 +61,6 @@
 		add
 		dup1
 		0x00
-		swap1
-		gt
+		lt
 		loop jumpi
 }

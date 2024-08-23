@@ -44,6 +44,7 @@
 
 replaceme
 
+		pop // pop return offset (TODO: don't recompute this every iteration of the loop)
 		// stack: loop counter, precompile address, output size, input size
 
 		// loop conditional jump evaluation
@@ -51,7 +52,6 @@ replaceme
 		add
 		dup1
 		0x00
-		swap1
-		gt
+		lt
 		loop jumpi
 }

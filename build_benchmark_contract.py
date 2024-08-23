@@ -2,12 +2,14 @@ import sys
 
 source_file = sys.argv[1]
 
+# stack: return offset, loop counter, precompile_address, output_size, input_size
+# want: gas	addr	argsOffset	argsLength	retOffset	retLength
 loop_body = """
 		dup4
-		swap1
-		dup6
+		dup2
+		dup7
 		0x00
-		dup6
+		dup7
 		gaslimit
 		staticcall
 		pop

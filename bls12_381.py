@@ -28,13 +28,12 @@ def fq_sqr(x) -> int:
     return mulmont(x, x)
 
 def fq_inv(x) -> int:
-    # TODO implement this using fermat's little theorem with the generated addchain
     x_norm = to_norm(x)
-    res = pow(x, -1, fq_mod)
+    res = pow(x_norm, -1, fq_mod)
     return to_mont(res)
 
 def encode_fp_eip2537(x) -> str:
-    x_hex = hex(x)[2:]
+    x_hex = hex(to_norm(x))[2:]
     return "0" * (128 - len(x_hex)) + x_hex
 
 def encode_fr_eip2537(x) -> str:
@@ -55,6 +54,9 @@ class G1AffinePoint:
     def to_proj(self):
         return G1ProjPoint(self.x, self.y, 1)
 
+    def clone(self):
+        return G1AffinePoint(self.x, self.y)
+
 class G1ProjPoint:
     def __init__(self, x, y, z):
         self.x = x
@@ -67,6 +69,9 @@ class G1ProjPoint:
     def to_affine(self):
         if self.is_inf():
             return G1AffinePoint(0, 0)
+
+        if self.z == to_mont(1):
+            return G1AffinePoint(self.x, self.y)
 
         z_inv = fq_inv(self.z)
         return G1AffinePoint(fq_mul(self.x, z_inv), fq_mul(self.y, z_inv))
@@ -82,6 +87,9 @@ class G1ProjPoint:
     def double(self):
         res = point_double(self, fq_mul, fq_add, fq_sub, fq_mul_by_3b)
         return G1ProjPoint(res[0], res[1], res[2])
+
+    def clone(self):
+        return G1ProjPoint(self.x, self.y, self.z)
 
     def is_inf(self):
         pass
@@ -159,6 +167,9 @@ class G2ProjPoint:
     def to_affine(self):
         if self.is_inf():
             return G2AffinePoint(0, 0, 0, 0)
+        if self.z[0] == to_mont(1) and self.z[1] == 0:
+            return G2AffinePoint(self.x[0], self.x[1], self.y[0], self.y[1])
+
         z_inv = fq2_inv((self.z[0], self.z[1]))
         x = fq2_mul((self.x[0], self.x[1]), z_inv)
         y = fq2_mul((self.y[0], self.y[1]), z_inv)
@@ -280,7 +291,7 @@ g2_gen_point_affine = G2AffinePoint(g2_gen_x_0, g2_gen_x_1, g2_gen_y_0, g2_gen_y
 
 
 def g1_gen():
-    return g1_gen_point
+    return g1_gen_point.clone()
 
 def g1_gen_mont():
     res = g1_gen()
@@ -325,6 +336,9 @@ def test_g2_mul():
     scalar = SUBGROUP_ORDER
     res = gen.mul(scalar)
     assert res.is_inf()
+
+    res = gen.double().to_affine()
+    assert res.eq(gen.add(gen).to_affine())
 
 def test_g2_add():
     gen = g1_gen_mont()

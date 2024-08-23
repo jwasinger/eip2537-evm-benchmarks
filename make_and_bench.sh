@@ -5,4 +5,4 @@ bytecode=$(huffc --bytecode contracts/benchmark.huff -r 2>&1 | python3 capture_h
 
 input=$(python3 gen_bench_input.py $PRECOMPILE $INPUT_COUNT)
 
-~/projects/go-ethereum/build/bin/evm --code $bytecode --input $input --prestate ./genesis.json run --bench 2>&1
+~/projects/go-ethereum/build/bin/evm --gas 10000000000 --code $bytecode --input $input --prestate ./genesis.json --bench run 2>&1
