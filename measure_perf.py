@@ -10,8 +10,8 @@ stats_bench = input.split(',')[1]
 bench_exec_time = int(stats_bench.split("-")[0])
 bench_gas_used = int(stats_bench.split("-")[1])
 
-print("bench gas used: {}, bench time: {}".format(bench_gas_used, bench_exec_time))
-print("noop gas used: {}, noop time: {}".format(noop_gas_used, noop_exec_time))
+#print("bench gas used: {}, bench time: {}".format(bench_gas_used, bench_exec_time))
+#print("noop gas used: {}, noop time: {}".format(noop_gas_used, noop_exec_time))
 
 # calc throughput after subtracting noop gas/time from bench gas/time
 corrected_gas_used = bench_gas_used - noop_gas_used
@@ -19,4 +19,5 @@ corrected_exec_time = bench_exec_time - noop_exec_time
 
 gas_throughput = corrected_gas_used / (corrected_exec_time / 1e9)
 gas_throughput /= 1e6
-print("throughput: {} million gas / sec".format(gas_throughput))
+#print("throughput: {} million gas / sec".format(gas_throughput))
+print(round(gas_throughput))

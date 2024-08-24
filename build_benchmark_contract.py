@@ -16,11 +16,11 @@ bench_loop_body = """
 """
 
 noop_loop_body = """
-		dup4
-		dup2
-		dup7
 		0x00
 		0x00
+		0x00
+		0x00
+		0x04
 		gaslimit
 		staticcall
 		pop
