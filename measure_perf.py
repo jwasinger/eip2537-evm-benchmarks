@@ -14,8 +14,8 @@ bench_gas_used = int(stats_bench.split("-")[1])
 #print("noop gas used: {}, noop time: {}".format(noop_gas_used, noop_exec_time))
 
 # calc throughput after subtracting noop gas/time from bench gas/time
-corrected_gas_used = bench_gas_used - noop_gas_used
-corrected_exec_time = bench_exec_time - noop_exec_time
+corrected_gas_used = bench_gas_used + (15 * 2850) - noop_gas_used
+corrected_exec_time = bench_exec_time + (15 * 2850) - noop_exec_time
 
 gas_throughput = corrected_gas_used / (corrected_exec_time / 1e9)
 gas_throughput /= 1e6

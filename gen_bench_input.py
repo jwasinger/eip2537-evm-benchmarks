@@ -1,4 +1,4 @@
-import sys
+import sys, random
 
 from bls12_381 import g1_gen_affine, g2_gen_affine, encode_fp_eip2537, encode_fr_eip2537, SUBGROUP_ORDER, g2_gen, g1_gen, g2_gen_mont, g1_gen_mont, to_mont, to_norm, g1_inf
 
@@ -16,18 +16,47 @@ def encode16byte(val: int):
 precompile_input = ""
 precompile = sys.argv[1]
 
+def gen_g1_msm_input(num_points):
+	input = ""
+	for i in range(num_points):
+		rand_scalar1 = random.randint(0, SUBGROUP_ORDER)
+		rand_scalar2 = random.randint(0, SUBGROUP_ORDER)
+		rand_point = g1_gen().mul(rand_scalar2).to_affine() 
+
+		input += rand_point.encode_eip2537() + encode_fr_eip2537(rand_scalar1)
+
+	return input
+
+def gen_g2_msm_input(num_points):
+	input = ""
+	for i in range(num_points):
+		rand_scalar1 = random.randint(0, SUBGROUP_ORDER)
+		rand_scalar2 = random.randint(0, SUBGROUP_ORDER)
+		rand_point = g2_gen().mul(rand_scalar2).to_affine() 
+
+		input += rand_point.encode_eip2537() + encode_fr_eip2537(rand_scalar1)
+
+	return input
+
+def random_g1_point():
+	return g1_gen().mul(random.randint(0, SUBGROUP_ORDER)).to_affine().encode_eip2537()
+
+def random_g2_point():
+	return g2_gen().mul(random.randint(0, SUBGROUP_ORDER)).to_affine().encode_eip2537()
+
+
 # return non-trivial pairs which pass pairing check
 def gen_pairing_input(num_pairs: int):
 	input = ""
 	if num_pairs % 2 == 0:
 		for i in range(num_pairs):
 			if i % 2 == 0:
-				pt_g1 = g1_gen().double().neg().to_affine().encode_eip2537()
-				pt_g2 = g2_gen().to_affine().encode_eip2537()
+				pt_g1 = random_g1_point()#g1_gen().double().neg().to_affine().encode_eip2537()
+				pt_g2 = random_g2_point()#g2_gen().double().to_affine().encode_eip2537()
 				input += pt_g1 + pt_g2
 			else:
-				pt_g1 = g1_gen().double().to_affine().encode_eip2537()
-				pt_g2 = g2_gen().to_affine().encode_eip2537()
+				pt_g1 = random_g1_point()#g1_gen().double().to_affine().encode_eip2537()
+				pt_g2 = random_g2_point()#g2_gen().double().to_affine().encode_eip2537()
 				input += pt_g1 + pt_g2
 	else:
 		for i in range(num_pairs):
@@ -111,6 +140,30 @@ elif precompile == "pairing":
 	input_size = encode16byte(num_pairs * (128 + 256))
 	output_size = encode16byte(32)
 	input = gen_pairing_input(num_pairs)
+
+	precompile_input = input_size + output_size + precompile_address + input
+elif precompile == "g1msm":
+	if len(sys.argv) < 3:
+		raise Exception("need to specify number of points as 2nd parameter")
+
+	num_points = int(sys.argv[2])
+
+	precompile_address = '00'*19 + '0d'
+	input_size = encode16byte(num_points * (32 + 128))
+	output_size = encode16byte(128)
+	input = gen_g1_msm_input(num_points)
+
+	precompile_input = input_size + output_size + precompile_address + input
+elif precompile == "g2msm":
+	if len(sys.argv) < 3:
+		raise Exception("need to specify number of points as 2nd parameter")
+
+	num_points = int(sys.argv[2])
+
+	precompile_address = '00'*19 + '10'
+	input_size = encode16byte(num_points * (32 + 256))
+	output_size = encode16byte(256)
+	input = gen_g2_msm_input(num_points)
 
 	precompile_input = input_size + output_size + precompile_address + input
 else:
