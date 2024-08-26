@@ -5,7 +5,10 @@ This is a set of cross-client benchmarks for EIP-2537 implemented as a contract 
 Benchmark inputs are based on identified worst-case inputs for the [gnark](https://github.com/Consensys/gnark-crypto/tree/master/ecc/bls12-381) bls12381 implementation used by Geth.
 
 ## Usage
-`GETH_EVM=/path/to/geth/evm/binary PRECOMPILE=precompileName INPUT_COUNT=1234 ./make_and_bench.sh`
+
+Benchmark contracts are written in [huff](https://github.com/huff-language/huff-rs).  To build them `huffc` must be on the executable path.
+
+Build and run benchmarks:  `GETH_EVM=/path/to/geth/evm/binary PRECOMPILE=precompileName INPUT_COUNT=1234 ./make_and_bench.sh`
 
 `PRECOMPILE` must be one of `g1add`, `g1mul`, `g1msm`, `g2add`, `g2mul`, `g2msm`, `pairing`, `mapfp`, `mapfp2`.
 

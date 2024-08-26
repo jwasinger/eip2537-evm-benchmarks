@@ -19,4 +19,4 @@ corrected_exec_time = bench_exec_time + (15 * 2850) - noop_exec_time
 
 gas_throughput = corrected_gas_used / (corrected_exec_time / 1e9)
 gas_throughput /= 1e6
-print("throughput: {} million gas / sec".format(gas_throughput))
+print("{} mgas/sec".format(round(gas_throughput)))
