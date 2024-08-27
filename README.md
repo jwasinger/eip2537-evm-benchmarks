@@ -32,3 +32,14 @@ Benchmark contracts are written in [huff](https://github.com/huff-language/huff-
 
 ### Note on MSM
 Random inputs are not necessarily the worst-case input. However, they perform poorly with the current gas schedule when limited to single-threaded execution.  For Geth, picking an MSM algorithm that performs best on a single thread and/or modifying the gas schedule of the EIP is a TODO.
+
+## Benchmark Methodology and Justification
+
+The benchmarking contract consists of 2850 static calls to a target precompile contract.  To account for the skew of the overhead from non-precompile EVM instruction, a "noop" benchmark consisting of 2850 calls to the identity precompile (copying zero bytes) is performed.  The gas and execution time from the noop benchmark are subtracted from those of the BLS precompile benchmark, before computing the resulting gas throughput.
+
+To give justification that the results of the EVM benchmarks are accurate, the results of native Golang benchmarks within the Geth repository on (presumed) equivalent inputs are provided [here]().  All EVM benchmarks execute with similar gas throughput compared to native counterparts, with the exception of G1Add and G2Add whose EVM benchmarks have 10%, 16% higher reported throughput respectively.
+
+The results of several benchmarking runs are provided in this repository:
+* EVM benchmarks of all EIP-2537 precompiles on a M2 Macbook Pro [here](benchmark_output/mbp_m2_16gb.txt).
+* EVM benchmarks of all EIP-2537 precompiles on a M2 Macbook Pro (restricted to non-concurrent execution for MSM) [here](benchmark_output/mbp_m2_16gb-no-concurrent.txt).
+* Native Golang EIP-2537 benchmarks from Geth [here](benchmark_output/geth-native.txt).  Note that provided MSM benchmarks are for 16 points.

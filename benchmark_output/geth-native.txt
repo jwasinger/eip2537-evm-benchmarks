@@ -1,0 +1,8 @@
+BenchmarkPrecompiledBLS12381G1Add/matter_g1_add_98-Gas=500-12                     352144              3402 ns/op               500.0 gas/op            147.0 mgas/s          320 B/op          3 allocs/op
+BenchmarkPrecompiledBLS12381G1Mul/matter_g1_mul_17-Gas=12000-12                     9478            124900 ns/op             12000 gas/op               96.07 mgas/s        1088 B/op         14 allocs/op
+BenchmarkPrecompiledBLS12381G1MultiExp/matter_g1_multiexp_82-Gas=64128-12            979           1220272 ns/op             64128 gas/op               52.54 mgas/s       41866 B/op        279 allocs/op
+BenchmarkPrecompiledBLS12381G2Add/matter_g2_add_9-Gas=800-12                      195918              6070 ns/op               800.0 gas/op            131.8 mgas/s          640 B/op          3 allocs/op
+BenchmarkPrecompiledBLS12381G2Mul/matter_g2_mul_12-Gas=45000-12                     3894            305395 ns/op             45000 gas/op              147.3 mgas/s         1128 B/op         11 allocs/op
+BenchmarkPrecompiledBLS12381G2MultiExp/matter_g2_multiexp_23-Gas=240480-12                   568           2125916 ns/op            240480 gas/op              113.1 mgas/s        54410 B/op        229 allocs/op
+BenchmarkPrecompiledBLS12381MapG1/matter_fp_to_g1_94-Gas=5500-12                                   21752             54987 ns/op              5500 gas/op              100.0 mgas/s          560 B/op          9 allocs/op
+BenchmarkPrecompiledBLS12381MapG2/matter_fp2_to_g2_2-Gas=75000-12                                   4023            281862 ns/op             75000 gas/op              266.1 mgas/s         1120 B/op         17 allocs/op
