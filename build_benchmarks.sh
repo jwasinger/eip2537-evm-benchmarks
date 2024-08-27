@@ -22,7 +22,7 @@ python3 gen_bench_input.py g2mul > benchmark_inputs/g2mul.hex
 
 for input_count in {1..32}
 do
-python3 gen_bench_input.py g1msm $input_count > benchmark_inputs/g2msm$input_count.hex
+python3 gen_bench_input.py g2msm $input_count > benchmark_inputs/g2msm$input_count.hex
 done
 
 python3 gen_bench_input.py mapfp > benchmark_inputs/mapfp.hex

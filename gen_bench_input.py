@@ -1,4 +1,5 @@
 import sys, random
+random.seed(42)
 
 from bls12_381 import g1_gen_affine, g2_gen_affine, encode_fp_eip2537, encode_fr_eip2537, SUBGROUP_ORDER, g2_gen, g1_gen, g2_gen_mont, g1_gen_mont, to_mont, to_norm, g1_inf
 
@@ -45,34 +46,15 @@ def random_g2_point():
 	return g2_gen().mul(random.randint(0, SUBGROUP_ORDER)).to_affine().encode_eip2537()
 
 
-# return non-trivial pairs which pass pairing check
+# return random pairs
+# ideally, the inputs will cause the pairing check to pass. However, I haven't figured out how to
+# generate worst-case inputs that also pass the pairing check.
 def gen_pairing_input(num_pairs: int):
 	input = ""
-	if num_pairs % 2 == 0:
-		for i in range(num_pairs):
-			if i % 2 == 0:
-				pt_g1 = random_g1_point()#g1_gen().double().neg().to_affine().encode_eip2537()
-				pt_g2 = random_g2_point()#g2_gen().double().to_affine().encode_eip2537()
-				input += pt_g1 + pt_g2
-			else:
-				pt_g1 = random_g1_point()#g1_gen().double().to_affine().encode_eip2537()
-				pt_g2 = random_g2_point()#g2_gen().double().to_affine().encode_eip2537()
-				input += pt_g1 + pt_g2
-	else:
-		for i in range(num_pairs):
-			if i == 0:
-				pt_g1 = g1_inf().to_affine().encode_eip2537()
-				pt_g2 = g2_gen().double().to_affine().encode_eip2537()
-
-				input += pt_g1 + pt_g2
-			elif i % 2 == 0:
-				pt_g1 = g1_gen().double().neg().to_affine().encode_eip2537()
-				pt_g2 = g2_gen().to_affine().encode_eip2537()
-				input += pt_g1 + pt_g2
-			else:
-				pt_g1 = g1_gen().double().to_affine().encode_eip2537()
-				pt_g2 = g2_gen().to_affine().encode_eip2537()
-				input += pt_g1 + pt_g2
+	for i in range(num_pairs):
+		pt_g1 = random_g1_point()
+		pt_g2 = random_g2_point()
+		input += pt_g1 + pt_g2
 
 	return input
 
