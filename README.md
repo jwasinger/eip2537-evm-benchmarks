@@ -1,8 +1,8 @@
-# EIP-2537 Benchmarks
+# EIP-2537 EVM Benchmarks
 
-This is a set of cross-client benchmarks for EIP-2537 implemented as a contract which calls a target precompile with worst-case inputs many times.  These are currently executed with Geth' `evm` tool. The next step is to convert them to state tests and execute them across all clients.
+This is a set of cross-client benchmarks for EIP-2537 implemented as a contract which calls a target precompile with worst-case inputs many times.  These are currently executed with Geth's `evm` tool. The next step is to convert them to state tests and execute them across all clients.
 
-Benchmark inputs are based on identified worst-case inputs for the [gnark](https://github.com/Consensys/gnark-crypto/tree/master/ecc/bls12-381) bls12381 implementation used by Geth.
+Benchmark inputs are based on identified worst-case inputs for [gnark](https://github.com/Consensys/gnark-crypto/tree/master/ecc/bls12-381), the bls12381 implementation used by Geth.
 
 ## Usage
 
@@ -16,7 +16,7 @@ Benchmark contracts are written in [huff](https://github.com/huff-language/huff-
 `GETH_EVM=/path/to/geth/evm/binary ./benchmark_all.sh`
 
 #### Single Benchmark
-`GETH_EVM=/path/to/geth/evm/binary PRECOMPILE=pairing INPUT_COUNT=$input_count ./benchmark.sh`
+`GETH_EVM=/path/to/geth/evm/binary PRECOMPILE=$precompile INPUT_COUNT=$input_count ./benchmark.sh`
 
 `PRECOMPILE` must be one of `g1add`, `g1mul`, `g1msm`, `g2add`, `g2mul`, `g2msm`, `pairing`, `mapfp`, `mapfp2`.
 
@@ -31,11 +31,11 @@ Benchmark contracts are written in [huff](https://github.com/huff-language/huff-
 * Fp/Fp2 Mapping: random scalar.  The implementation is assumed to be mostly constant-time.
 
 ### Note on MSM
-Random inputs are not necessarily the worst-case input. However, they perform poorly with the current gas schedule when limited to single-threaded execution.  For Geth, picking an MSM algorithm that performs best on a single thread and/or modifying the gas schedule of the EIP is a TODO.
+Random inputs are not necessarily the worst-case input. However, they perform poorly with the current gas schedule when limited to single-threaded execution.  For Geth, picking an MSM algorithm that performs best for single-threaded execution and/or modifying the gas schedule of the EIP is a TODO.
 
 ## Benchmark Method
 
-The benchmarking contract consists of 2850 static calls to a target precompile contract.  To account for the skew of the overhead from non-precompile EVM instructions, a "no-op" benchmark consisting of 2850 calls to the identity precompile (copying zero bytes) is performed.  The gas and execution time from the no-op benchmark are subtracted from those of the BLS precompile benchmark, before computing the resulting gas rate per precompile operation.
+The benchmarking contract consists of 2850 static calls to a target precompile contract.  To account for the skew of the overhead from non-precompile EVM instructions, a "no-op" benchmark consisting of 2850 calls to the identity precompile (copying zero bytes) is also performed.  The gas and execution time from the no-op benchmark are subtracted from those of the precompile benchmark, before computing the resulting gas rate per precompile operation.
 
 ## Geth EVM Benchmark Results on an M2 Macbook Pro
 
