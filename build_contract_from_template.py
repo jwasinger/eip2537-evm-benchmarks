@@ -35,6 +35,8 @@ if sys.argv[2] == 'bench':
 elif sys.argv[2] == 'noop':
 	loop_body = noop_loop_body
 
+loop_size = int(sys.argv[3])
+
 with open(source_file) as f:
 	lines = f.readlines()
 	for line in lines:
