@@ -38,7 +38,7 @@ Benchmark contracts are written in [huff](https://github.com/huff-language/huff-
 
 The benchmarking contract consists of 2850 static calls to a target precompile contract.  To account for the skew of the overhead from non-precompile EVM instructions, a "no-op" benchmark consisting of 2850 calls to the identity precompile (copying zero bytes) is also performed.  The gas and execution time from the no-op benchmark are subtracted from those of the precompile benchmark, before computing the resulting gas rate per precompile operation.
 
-## Geth EVM Benchmark Results on an M2 Macbook Pro
+## Geth Benchmark Results
 
 Several benchmark presets were executed and results are included in this repository:
 
