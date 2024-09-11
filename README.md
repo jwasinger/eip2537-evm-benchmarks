@@ -48,6 +48,7 @@ Several benchmark presets were executed and results are included in this reposit
 * [EVM benchmarks](benchmark_output/mbp_m2_16gb-no-concurrent.txt) restricted to make MSM precompiles not use concurrency
 * [EVM benchmarks](benchmark_output/mbp_m2_16gb-no-concurrent-repricing.txt) restricted to make MSM precompiles not use concurrency.  MSM Price modified to [double](https://github.com/jwasinger/go-ethereum/commit/f1c2a2a7219c9e21570f7f98c6a0868e0344e8e1) discount factor for all table entries.
 * [Ecrecover precompile benchmarks](benchmark_output/mbp_m2_ecrecover.txt)
+* Native Go EIP-2537 benchmarks from Geth [here](benchmark_output/geth-native.txt).  Note that provided MSM benchmarks are for 16 points.
 
 ### Xeon8280 Benchmarks
 
@@ -56,7 +57,6 @@ Several benchmark presets were executed and results are included in this reposit
 * [EVM Benchmarks](benchmark_output/xeon8280-2.70ghz-msm-no-concurrent-repricing.txt) of MSM precompiles modified to not use concurrency. MSM Price modified to [double](https://github.com/jwasinger/go-ethereum/commit/f1c2a2a7219c9e21570f7f98c6a0868e0344e8e1) discount factor for all table entries.
 * [Ecrecover precompile benchmarks](benchmark_output/xeon8280-2.70ghz-ecrecover.txt)
 
-* Native Golang EIP-2537 benchmarks from Geth [here](benchmark_output/geth-native.txt).  Note that provided MSM benchmarks are for 16 points.
 
 ### Xeon8280 Benchmarks
 
