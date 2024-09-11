@@ -7,10 +7,7 @@ do
 	PRECOMPILE=$precompile ./benchmark.sh
 done
 
-echo "benchmarking g1msm"
 ./benchmark_g1msm.sh
-
-echo "benchmarking g2msm"
 ./benchmark_g2msm.sh
 
 echo "benchmarking pairing"

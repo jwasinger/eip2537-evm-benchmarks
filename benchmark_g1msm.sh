@@ -1,5 +1,6 @@
 #! /usr/bin/env bash
 
+echo "benchmarking g1msm"
 for i in {1..32}
 do
 	echo -n "	$i pairs: "

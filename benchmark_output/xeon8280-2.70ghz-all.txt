@@ -1,0 +1,99 @@
+benchmarking g1add
+	105 mgas/sec
+benchmarking g1mul
+	74 mgas/sec
+benchmarking g2add
+	105 mgas/sec
+benchmarking g2mul
+	143 mgas/sec
+benchmarking mapfp
+	80 mgas/sec
+benchmarking mapfp2
+	272 mgas/sec
+benchmarking g1msm
+	1 pairs: 58 mgas/sec
+	2 pairs: 68 mgas/sec
+	3 pairs: 70 mgas/sec
+	4 pairs: 66 mgas/sec
+	5 pairs: 67 mgas/sec
+	6 pairs: 64 mgas/sec
+	7 pairs: 59 mgas/sec
+	8 pairs: 55 mgas/sec
+	9 pairs: 56 mgas/sec
+	10 pairs: 56 mgas/sec
+	11 pairs: 54 mgas/sec
+	12 pairs: 53 mgas/sec
+	13 pairs: 52 mgas/sec
+	14 pairs: 50 mgas/sec
+	15 pairs: 49 mgas/sec
+	16 pairs: 46 mgas/sec
+	17 pairs: 46 mgas/sec
+	18 pairs: 46 mgas/sec
+	19 pairs: 45 mgas/sec
+	20 pairs: 45 mgas/sec
+	21 pairs: 45 mgas/sec
+	22 pairs: 45 mgas/sec
+	23 pairs: 45 mgas/sec
+	24 pairs: 43 mgas/sec
+	25 pairs: 44 mgas/sec
+	26 pairs: 43 mgas/sec
+	27 pairs: 43 mgas/sec
+	28 pairs: 42 mgas/sec
+	29 pairs: 42 mgas/sec
+	30 pairs: 41 mgas/sec
+	31 pairs: 40 mgas/sec
+	32 pairs: 40 mgas/sec
+	64 pairs: 34 mgas/sec
+	128 pairs: 27 mgas/sec
+	256 pairs: 28 mgas/sec
+	512 pairs: 28 mgas/sec
+	2048 pairs: 29 mgas/sec
+	4096 pairs: 29 mgas/sec
+benchmarking g2msm
+	1 pairs: 91 mgas/sec
+	2 pairs: 112 mgas/sec
+	3 pairs: 123 mgas/sec
+	4 pairs: 121 mgas/sec
+	5 pairs: 123 mgas/sec
+	6 pairs: 127 mgas/sec
+	7 pairs: 123 mgas/sec
+	8 pairs: 118 mgas/sec
+	9 pairs: 116 mgas/sec
+	10 pairs: 118 mgas/sec
+	11 pairs: 113 mgas/sec
+	12 pairs: 111 mgas/sec
+	13 pairs: 111 mgas/sec
+	14 pairs: 110 mgas/sec
+	15 pairs: 107 mgas/sec
+	16 pairs: 105 mgas/sec
+	17 pairs: 106 mgas/sec
+	18 pairs: 106 mgas/sec
+	19 pairs: 106 mgas/sec
+	20 pairs: 106 mgas/sec
+	21 pairs: 106 mgas/sec
+	22 pairs: 107 mgas/sec
+	23 pairs: 107 mgas/sec
+	24 pairs: 106 mgas/sec
+	25 pairs: 105 mgas/sec
+	26 pairs: 105 mgas/sec
+	27 pairs: 103 mgas/sec
+	28 pairs: 103 mgas/sec
+	29 pairs: 102 mgas/sec
+	30 pairs: 101 mgas/sec
+	31 pairs: 100 mgas/sec
+	32 pairs: 99 mgas/sec
+	64 pairs: 90 mgas/sec
+	128 pairs: 75 mgas/sec
+	256 pairs: 80 mgas/sec
+	512 pairs: 83 mgas/sec
+	2048 pairs: 84 mgas/sec
+	4096 pairs: 87 mgas/sec
+benchmarking pairing
+	1 pairs: 130 mgas/sec
+	2 pairs: 125 mgas/sec
+	3 pairs: 124 mgas/sec
+	4 pairs: 123 mgas/sec
+	5 pairs: 122 mgas/sec
+	6 pairs: 122 mgas/sec
+	7 pairs: 122 mgas/sec
+	8 pairs: 119 mgas/sec
