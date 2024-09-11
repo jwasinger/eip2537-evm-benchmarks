@@ -44,7 +44,7 @@ The benchmarking contract consists of 2850 static calls to a target precompile c
 
 * [EVM benchmarks](benchmark_output/mbp_m2_16gb.txt) for all bls precompiles.
 * [EVM benchmarks](benchmark_output/mbp_m2_16gb-no-concurrent.txt) restricted to make MSM precompiles not use concurrency
-* [EVM benchmarks](benchmark_output/mbp_m2_16gb-no-concurrent-repricing.txt) restricted to make MSM precompiles not use concurrency.  MSM Price modified to [double](https://github.com/jwasinger/go-ethereum/commit/f1c2a2a7219c9e21570f7f98c6a0868e0344e8e1) discount factor for all table entries.
+* [EVM benchmarks](benchmark_output/mbp_m2_16gb-no-concurrent-repricing.txt) restricted to make MSM precompiles not use concurrency.  MSM Price modified to [double](https://github.com/jwasinger/go-ethereum/commit/f1c2a2a7219c9e21570f7f98c6a0868e0344e8e1) all "discount table" entries in the gas model.
 * [Ecrecover precompile benchmarks](benchmark_output/mbp_m2_ecrecover.txt)
 * Native Go EIP-2537 benchmarks from Geth [here](benchmark_output/geth-native.txt).  Note that provided MSM benchmarks are for 16 points.
 
@@ -52,13 +52,12 @@ The benchmarking contract consists of 2850 static calls to a target precompile c
 
 * [EVM Benchmarks](benchmark_output/xeon8280-2.70ghz-all.txt) for all bls precompiles.
 * [EVM Benchmarks](benchmark_output/xeon8280-2.70ghz-all-no-concurrent.txt) restricted to make MSM precompiles not use concurrency.
-* [EVM Benchmarks](benchmark_output/xeon8280-2.70ghz-msm-no-concurrent-repricing.txt) of MSM precompiles modified to not use concurrency. MSM Price modified to [double](https://github.com/jwasinger/go-ethereum/commit/f1c2a2a7219c9e21570f7f98c6a0868e0344e8e1) discount factor for all table entries.
+* [EVM Benchmarks](benchmark_output/xeon8280-2.70ghz-msm-no-concurrent-repricing.txt) of MSM precompiles modified to not use concurrency. MSM Price modified to [double](https://github.com/jwasinger/go-ethereum/commit/f1c2a2a7219c9e21570f7f98c6a0868e0344e8e1) all "discount table" entries in the gas model.
 * [Ecrecover precompile benchmarks](benchmark_output/xeon8280-2.70ghz-ecrecover.txt)
 
 
-### Xeon8280 Benchmarks
 
-Takeaways:
-* MSM precompiles are underpriced compared other precompiles, especially when concurrency is disabled.
+## Takeaways
+* MSM precompiles are underpriced compared to the other EIP-2537 precompiles when concurrency is disabled. In the worst case, they are underpriced by 100% compared to the ecrecover precompile.
 * Native Go benchmark performance is on par with results calculated from EVM Benchmarks.
 	* The G1/G2Add EVM benchmarks have 10, 16% higher reported gas rate than native counterparts.  I'm not yet sure why.
