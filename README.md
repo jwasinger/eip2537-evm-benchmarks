@@ -40,8 +40,6 @@ The benchmarking contract consists of 2850 static calls to a target precompile c
 
 ## Geth Benchmark Results
 
-Several benchmark presets were executed and results are included in this repository:
-
 ### M2 Macbook Pro  Benchmarks
 
 * [EVM benchmarks](benchmark_output/mbp_m2_16gb.txt) for all bls precompiles.
