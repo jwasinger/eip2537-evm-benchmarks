@@ -8,18 +8,10 @@ do
 done
 
 echo "benchmarking g1msm"
-for input_count in {1..32}
-do
-	echo -n "	$input_count pairs: "
-	PRECOMPILE=g1msm INPUT_COUNT=$input_count ./benchmark.sh
-done
+./benchmark_g1msm.sh
 
 echo "benchmarking g2msm"
-for input_count in {1..32}
-do
-	echo -n "	$input_count pairs: "
-	PRECOMPILE=g2msm INPUT_COUNT=$input_count ./benchmark.sh
-done
+./benchmark_g2msm.sh
 
 echo "benchmarking pairing"
 for input_count in {1..8}

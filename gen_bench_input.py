@@ -20,7 +20,7 @@ precompile = sys.argv[1]
 def gen_g1_msm_input(num_points):
 	input = ""
 	for i in range(num_points):
-		rand_scalar1 = random.randint(0, SUBGROUP_ORDER)
+		rand_scalar1 = 0x0fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 		rand_scalar2 = random.randint(0, SUBGROUP_ORDER)
 		rand_point = g1_gen().mul(rand_scalar2).to_affine() 
 
