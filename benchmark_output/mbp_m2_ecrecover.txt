@@ -1,0 +1,1 @@
+BenchmarkPrecompiledEcrecover/-Gas=3000-12                 26032             47245 ns/op              3000 gas/op               63.49 mgas/s         800 B/op          7 allocs/op
