@@ -47,7 +47,6 @@ benchmarking g1msm
 128 pairs, 21 mgas/sec
 256 pairs, 22 mgas/sec
 512 pairs, 23 mgas/sec
-1024 pairs, 1000 mgas/sec
 2048 pairs, 24 mgas/sec
 benchmarking g2msm
 1 pairs, 58 mgas/sec
@@ -86,7 +85,6 @@ benchmarking g2msm
 128 pairs, 51 mgas/sec
 256 pairs, 55 mgas/sec
 512 pairs, 58 mgas/sec
-1024 pairs, 1000 mgas/sec
 2048 pairs, 64 mgas/sec
 benchmarking pairing
 	1 pairs: 130 mgas/sec

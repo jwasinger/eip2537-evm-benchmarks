@@ -74,4 +74,3 @@ g1msm
 256 pairs, 44 mgas/sec
 512 pairs, 46 mgas/sec
 2048 pairs, 48 mgas/sec
-4096 pairs, 1000 mgas/sec
