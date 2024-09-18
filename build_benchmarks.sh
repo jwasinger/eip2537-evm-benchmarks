@@ -34,7 +34,7 @@ python3 gen_bench_input.py g1msm 128 > benchmark_inputs/g1msm128.hex
 python3 gen_bench_input.py g1msm 256 > benchmark_inputs/g1msm256.hex
 python3 gen_bench_input.py g1msm 512 > benchmark_inputs/g1msm512.hex
 python3 gen_bench_input.py g1msm 2048 > benchmark_inputs/g1msm2048.hex
-python3 gen_bench_input.py g1msm 4096 > benchmark_inputs/g1msm4096.hex
+python3 gen_bench_input.py g1msm 4787 > benchmark_inputs/g1msm4787.hex
 
 python3 gen_bench_input.py g2add > benchmark_inputs/g2add.hex
 python3 gen_bench_input.py g2mul > benchmark_inputs/g2mul.hex
@@ -49,7 +49,6 @@ python3 gen_bench_input.py g2msm 128 > benchmark_inputs/g2msm128.hex
 python3 gen_bench_input.py g2msm 256 > benchmark_inputs/g2msm256.hex
 python3 gen_bench_input.py g2msm 512 > benchmark_inputs/g2msm512.hex
 python3 gen_bench_input.py g2msm 2048 > benchmark_inputs/g2msm2048.hex
-python3 gen_bench_input.py g2msm 4096 > benchmark_inputs/g2msm4096.hex
 
 python3 gen_bench_input.py mapfp > benchmark_inputs/mapfp.hex
 python3 gen_bench_input.py mapfp2 > benchmark_inputs/mapfp2.hex
